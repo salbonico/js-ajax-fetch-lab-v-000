@@ -16,7 +16,7 @@ fetch('https://api.github.com/user/repos', {
 function forkRepo() {
   const repo = 'learn-co-curriculum/js-ajax-fetch-lab';
   //use fetch to fork it!
-  const token = '844f2903adb5e310887415f7158757bd241d7a32';
+  const token = 'f1cfbaf72d7cc48b787fb639ad752316667a274b';
   fetch('https://api.github.com/repos/learn-co-curriculum/js-ajax-fetch-lab/forks',
   {
     method: 'POST',
@@ -37,7 +37,7 @@ document.getElementById('results').append(`${json.html_url}`)
 
 function createIssue() {
   //use this function to create an issue based on the values input in index.html
-  const token = '844f2903adb5e310887415f7158757bd241d7a32';
+  const token = 'f1cfbaf72d7cc48b787fb639ad752316667a274b';
   const postData = {
   title: document.getElementById('title').value,
   body: document.getElementById('body').value,
@@ -51,11 +51,37 @@ function createIssue() {
     }
   }
 ).then(res => res.json())
- .then(json => console.log(json))
+ .then(getIssues())
   return '';
 }
 
 
 function getIssues() {
   //once an issue is submitted, fetch all open issues to see the issues you are creating
+  const token = 'f1cfbaf72d7cc48b787fb639ad752316667a274b';
+  fetch('https://api.github.com/repos/salbonico/js-ajax-fetch-lab-v-000/issues',
+  	{
+    method: 'GET',
+    headers: {
+      Authorization: `token ${token}`
+    }
+	}
+ ).then(res => res.json())
+ .then(json => showResults(json))
+ return '';
 }
+
+ function showResults(json) {
+   //use this function to display the results from forking via the API
+ let issues = json;
+  const issuesList = `<ul>${issues
+    .map( issue =>
+
+        '<li><strong>' +
+        issue.title +
+        '</li>'
+    )
+    .join('')}</ul>`;
+  document.getElementById('issues').innerHTML = issuesList;
+
+ }
